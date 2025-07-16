@@ -1,0 +1,85 @@
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center p-4">
+      <div class="w-full max-w-md">
+        <!-- Logo y Header -->
+        <div class="text-center mb-8">
+
+          <h1 class="text-3xl font-bold text-gray-800 mb-2">Sistema de Gestion de Citas para consultorias Medicas</h1>
+        </div>
+
+        <!-- Formulario de Login -->
+        <mat-card class="shadow-xl border-0 overflow-hidden">
+          <div class="bg-gradient-to-r from-blue-600 to-green-600 text-white p-6">
+            <h2 class="text-2xl font-semibold text-center">Iniciar Sesión</h2>
+            <p class="text-center text-blue-100 mt-2">Accede al sistema de Citas Medicas</p>
+          </div>
+
+          <div class="p-8">
+            <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+              <!-- Email -->
+              <mat-form-field class="w-full mb-4">
+                <mat-label>Correo Electrónico</mat-label>
+                <input matInput type="email" formControlName="email" required>
+                <mat-icon matSuffix>email</mat-icon>
+                <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+                  El correo es requerido
+                </mat-error>
+                <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+                  Ingresa un correo válido
+                </mat-error>
+              </mat-form-field>
+
+              <!-- Password -->
+              <mat-form-field class="w-full mb-4">
+                <mat-label>Contraseña</mat-label>
+                <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
+                <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+                  <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+                  La contraseña es requerida
+                </mat-error>
+                <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+                  La contraseña debe tener al menos 6 caracteres
+                </mat-error>
+              </mat-form-field>
+
+              <!-- Recordarme y Olvidé contraseña -->
+              <div class="flex items-center justify-between mb-6">
+                <mat-checkbox formControlName="rememberMe" class="text-sm">
+                  Recordarme
+                </mat-checkbox>
+                <a routerLink="/forgot-password" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                  ¿Olvidaste tu contraseña?
+                </a>
+              </div>
+
+              <!-- Botón de Login -->
+              <button
+                mat-raised-button
+                color="primary"
+                class="w-full h-12 text-lg font-semibold bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700"
+                type="submit"
+                [disabled]="loginForm.invalid || isLoading">
+
+                <mat-icon *ngIf="isLoading" class="animate-spin mr-2">refresh</mat-icon>
+                <mat-icon *ngIf="!isLoading" class="mr-2">login</mat-icon>
+                {{ isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
+              </button>
+            </form>
+
+            <br>
+
+            <!-- Enlace a Registro -->
+            <div class="text-center">
+              <p class="text-gray-600 mb-4">¿No tienes una cuenta?</p>
+              <a (click)="redirectToRegister()"
+                 mat-stroked-button
+                 class="w-full border-2 border-gray-300 hover:border-blue-500 text-gray-700 hover:text-blue-600">
+                <mat-icon class="mr-2">person_add</mat-icon>
+                Crear Cuenta
+              </a>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>

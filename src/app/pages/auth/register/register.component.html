@@ -1,0 +1,92 @@
+    <div class="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center p-4">
+      <div class="w-full max-w-2xl">
+        <!-- Logo y Header -->
+        <div class="text-center mb-8">
+          <h1 class="text-3xl font-bold text-gray-800 mb-2">Sistema de Gestion de Citas para consultorias Medicas</h1>
+          <p class="text-gray-600">Para acceder a la clinica</p>
+        </div>
+
+        <!-- Formulario de Registro -->
+        <mat-card class="shadow-xl border-0 overflow-hidden">
+          <div class="bg-gradient-to-r from-blue-600 to-green-600 text-white p-6">
+            <h2 class="text-2xl font-semibold text-center">Crear Cuenta</h2>
+          </div>
+
+          <div class="p-8">
+            <form [formGroup]="professionalForm">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <mat-form-field >
+                  <mat-label>Tipo de Usuario</mat-label>
+                  <mat-select formControlName="userType" required>
+                    <mat-option value="admin">
+                      <div class="flex items-center">
+                        <mat-icon class="mr-2 text-blue-600">admin_panel_settings</mat-icon>
+                        Administrador
+                      </div>
+                    </mat-option>
+                    <mat-option value="doctor">
+                      <div class="flex items-center">
+                        <mat-icon class="mr-2 text-green-600">medical_services</mat-icon>
+                        Doctor
+                      </div>
+                    </mat-option>
+                    <mat-option value="assistant">
+                      <div class="flex items-center">
+                        <mat-icon class="mr-2 text-purple-600">support_agent</mat-icon>
+                        Asistente
+                      </div>
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="professionalForm.get('userType')?.hasError('required')">
+                    Selecciona tu tipo de usuario
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field >
+                  <mat-label>Número de Licencia Médica</mat-label>
+                  <input matInput formControlName="licenseNumber">
+                  <mat-icon matSuffix>verified</mat-icon>
+                  <mat-hint>Solo para doctores titulados</mat-hint>
+                </mat-form-field>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <mat-form-field >
+                  <mat-label>Especialidad</mat-label>
+                  <mat-select formControlName="specialty">
+                    <mat-option value="general">Medicina General</mat-option>
+                    <mat-option value="cardiology">Cardiología</mat-option>
+                    <mat-option value="dermatology">Dermatología</mat-option>
+                    <mat-option value="neurology">Neurología</mat-option>
+                    <mat-option value="pediatrics">Pediatría</mat-option>
+                    <mat-option value="gynecology">Ginecología</mat-option>
+                    <mat-option value="orthopedics">Traumatología</mat-option>
+                    <mat-option value="psychiatry">Psiquiatría</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field >
+                  <mat-label>Años de Experiencia</mat-label>
+                  <mat-select formControlName="experience">
+                    <mat-option value="0-2">0-2 años</mat-option>
+                    <mat-option value="3-5">3-5 años</mat-option>
+                    <mat-option value="6-10">6-10 años</mat-option>
+                    <mat-option value="10+">Más de 10 años</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </form>
+
+            <div class="text-center">
+              <p class="text-gray-600 mb-4">¿Ya tienes una cuenta?</p>
+              <a routerLink="/login"
+                 mat-stroked-button
+                 class="w-full border-2 border-gray-300 hover:border-blue-500 text-gray-700 hover:text-blue-600">
+                <mat-icon class="mr-2">login</mat-icon>
+                Iniciar Sesión
+              </a>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>

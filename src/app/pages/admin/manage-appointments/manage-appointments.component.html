@@ -1,0 +1,90 @@
+    <div class="min-h-screen bg-gray-50">
+      <!-- Top Navigation -->
+      <mat-toolbar class="bg-blue-600 text-white shadow-md">
+        <button mat-icon-button (click)="toggleSidenav()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span class="ml-2 text-xl font-semibold">VetCare - Sistema de Citas</span>
+
+        <div class="flex-1"></div>
+
+        <!-- Notifications -->
+        <button mat-icon-button class="mr-2">
+          <mat-icon [matBadge]="3" matBadgeColor="warn">notifications</mat-icon>
+        </button>
+
+        <!-- User Menu -->
+        <button mat-button [matMenuTriggerFor]="userMenu" class="flex items-center">
+          <mat-icon class="mr-1">account_circle</mat-icon>
+          <span>Dr. María González</span>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item>
+            <mat-icon>person</mat-icon>
+            <span>Mi Perfil</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>settings</mat-icon>
+            <span>Configuración</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item>
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Cerrar Sesión</span>
+          </button>
+        </mat-menu>
+      </mat-toolbar>
+
+      <mat-sidenav-container class="h-full">
+        <!-- Sidebar -->
+        <mat-sidenav
+          #sidenav
+          mode="side"
+          opened="true"
+          class="w-64 bg-white shadow-lg">
+          <div class="p-4">
+            <div class="text-center mb-6">
+              <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <mat-icon class="text-blue-600 text-3xl">pets</mat-icon>
+              </div>
+              <h3 class="font-semibold text-gray-800">Panel Veterinario</h3>
+              <p class="text-sm text-gray-600">Administrador</p>
+            </div>
+
+            <nav>
+              <mat-nav-list>
+                <a mat-list-item routerLink="/dashboard" routerLinkActive="bg-blue-50 text-blue-600 font-medium">
+                  <mat-icon matListIcon>dashboard</mat-icon>
+                  <span>Dashboard</span>
+                </a>
+                <a mat-list-item routerLink="/citas" routerLinkActive="bg-blue-50 text-blue-600 font-medium">
+                  <mat-icon matListIcon>event</mat-icon>
+                  <span>Gestión de Citas</span>
+                </a>
+                <a mat-list-item routerLink="/veterinarios" routerLinkActive="bg-blue-50 text-blue-600 font-medium">
+                  <mat-icon matListIcon>medical_services</mat-icon>
+                  <span>Veterinarios</span>
+                </a>
+                <a mat-list-item routerLink="/pacientes" routerLinkActive="bg-blue-50 text-blue-600 font-medium">
+                  <mat-icon matListIcon>pets</mat-icon>
+                  <span>Pacientes</span>
+                </a>
+                <a mat-list-item routerLink="/horarios" routerLinkActive="bg-blue-50 text-blue-600 font-medium">
+                  <mat-icon matListIcon>schedule</mat-icon>
+                  <span>Horarios</span>
+                </a>
+                <a mat-list-item routerLink="/reportes" routerLinkActive="bg-blue-50 text-blue-600 font-medium">
+                  <mat-icon matListIcon>analytics</mat-icon>
+                  <span>Reportes</span>
+                </a>
+              </mat-nav-list>
+            </nav>
+          </div>
+        </mat-sidenav>
+
+        <!-- Main Content -->
+        <mat-sidenav-content class="p-6">
+          <router-outlet></router-outlet>
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+    </div>
