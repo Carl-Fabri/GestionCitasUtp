@@ -9,14 +9,19 @@ export const AuthRoutes: Routes = [
     children: [
       {
         path: 'login',
-        // canActivate: [authGuard],
+        canActivate: [authGuard],
         component: LoginComponent,
       },
       {
         path: 'register',
-        // canActivate: [authGuard],
+        canActivate: [authGuard],
         component: RegisterComponent,
       },
+      {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full'
+      }
     ],
   },
 ]

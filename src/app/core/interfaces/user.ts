@@ -1,16 +1,37 @@
+import { UserStorageService } from '../../services/user-storage.service';
 
 export interface User {
+  id: number;
+  name: string;
   email: string;
-  password: string;
+  dni: string;
+  role_id?: number;
   role: string;
+}
+
+export interface AuthMeResponse extends ApiResponse {
+  data: User;
+}
+
+export interface UserAuthMeResponse {
+  message: string;
+  data: User;
 }
 
 export interface AuthResponse extends ApiResponse {
   data: LoginResponse;
 }
 
-export interface LoginResponse extends DataAuth{
+export interface LoginResponse {
+  token: string;
+  refreshToken: string;
   user: User;
+}
+
+export interface RefreshTokenResponse extends ApiResponse {
+  data: {
+    token: string;
+  };
 }
 
 export interface RegisterResponse extends ApiResponse {
@@ -30,7 +51,7 @@ export interface RegisterRequest {
 export interface DataAuth
 {
   tokenType: string;
-  accessToken: string;
+  token: string;
 }
 
 export interface ApiResponse {

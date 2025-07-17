@@ -10,6 +10,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { AuthService } from '../../../services/auth.service';
+import { UserStorageService } from '../../../services/user-storage.service';
 
 @Component({
   selector: 'app-login',
@@ -24,20 +27,24 @@ import { MatDividerModule } from '@angular/material/divider';
     MatIconModule,
     MatCheckboxModule,
     MatSelectModule,
-    MatDividerModule
+    MatDividerModule,
+    MatSnackBarModule
   ],
   templateUrl: './login.component.html',
   styles: ``
 })
 export class LoginComponent {
   private router = inject(Router);
+  private authService = inject(AuthService);
+  private userStorage = inject(UserStorageService);
+  private snackBar = inject(MatSnackBar);
+
   loginForm: FormGroup;
   hidePassword = true;
   isLoading = false;
 
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
-      userType: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       rememberMe: [false]
@@ -48,17 +55,88 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.isLoading = true;
 
-      // Simular llamada a API
-      setTimeout(() => {
-        this.isLoading = false;
-        console.log('Login data:', this.loginForm.value);
-        // Aquí iría la lógica de autenticación
-        // this.router.navigate(['/dashboard']);
-      }, 2000);
+      const loginData = {
+        email: this.loginForm.get('email')?.value,
+        password: this.loginForm.get('password')?.value
+      };
+
+      this.authService.login(loginData).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+
+          if (response.success) {
+            // Mostrar mensaje de éxito
+            this.router.navigate(['/admin/manage-appointments']);
+
+            // this.snackBar.open('Inicio de sesión exitoso', 'Cerrar', {
+            //   duration: 3000,
+            //   panelClass: ['success-snackbar']
+            // });
+
+            // Redirigir según el rol del usuario
+            this.redirectByRole();
+          } else {
+            this.showErrorMessage(response.message || 'Error en el inicio de sesión');
+          }
+        },
+        error: (error) => {
+          this.isLoading = false;
+          console.error('Error en login:', error);
+
+          // Manejar diferentes tipos de errores
+          let errorMessage = 'Error de conexión. Inténtalo de nuevo.';
+
+          if (error.status === 401) {
+            errorMessage = 'Credenciales incorrectas. Verifica tu email y contraseña.';
+          } else if (error.status === 404) {
+            errorMessage = 'Usuario no encontrado.';
+          } else if (error.error?.message) {
+            errorMessage = error.error.message;
+          }
+
+          this.showErrorMessage(errorMessage);
+        }
+      });
+    } else {
+      // Marcar todos los campos como touched para mostrar errores
+      this.markFormGroupTouched();
     }
   }
 
+  private redirectByRole(): void {
+    const userRole = this.userStorage.getRole();
+
+    switch (userRole) {
+      case 'admin':
+        this.router.navigate(['/admin/dashboard']);
+        break;
+      case 'doctor':
+        this.router.navigate(['/doctor/dashboard']);
+        break;
+      case 'patient':
+        this.router.navigate(['/patient/dashboard']);
+        break;
+      default:
+        this.router.navigate(['/dashboard']);
+        break;
+    }
+  }
+
+  private showErrorMessage(message: string): void {
+    this.snackBar.open(message, 'Cerrar', {
+      duration: 5000,
+      panelClass: ['error-snackbar']
+    });
+  }
+
+  private markFormGroupTouched(): void {
+    Object.keys(this.loginForm.controls).forEach(key => {
+      const control = this.loginForm.get(key);
+      control?.markAsTouched();
+    });
+  }
+
   redirectToRegister() {
-    this.router.navigate(['./auth/register']);
+    this.router.navigate(['/auth/register']);
   }
 }
